@@ -10,9 +10,3 @@ class Transcriber:
     def transcribe(self, file_path: str) -> str:
         result = self.model.transcribe(file_path)
         return result["text"]
-
-
-model = whisper.load_model("base")
-result = model.transcribe("./test-files/trimmed.mp4")
-
-print(result)
