@@ -15,9 +15,8 @@ class LocalTranscriber:
 
 class GroqTranscriber:
     """Groq API wrapper for transcription"""
-    def __init__(self, model_name: str = "whisper-large-v3"):
-        load_dotenv()
-        self.client = Groq()
+    def __init__(self, client: Groq, model_name: str = "whisper-large-v3"):
+        self.client = client
         self.model_name = model_name
 
     def transcribe(self, file_path: str) -> str:

@@ -1,11 +1,11 @@
+import json
 from groq import Groq
 import os
 from dotenv import load_dotenv
 
 class GroqProcessor:
-    def __init__(self):
-        load_dotenv()
-        self.client = Groq()
+    def __init__(self, client: Groq):
+        self.client = client
         self.system_prompt = """You are a helpful AI assistant that creates educational content from lecture transcripts. 
         Your task is to create a structured JSON output containing:
         1. Key notes from the lecture (in markdown format)
@@ -29,27 +29,37 @@ class GroqProcessor:
         - Use > for blockquotes
         """
 
-    def process_transcript(self, transcript: str) -> str:
+    def process_transcript(self, transcript: str | None = None, slides: str | None = None) -> dict:
+        if transcript is None and slides is None:
+            raise ValueError("At least one of transcript or slides must be provided")
+            
+        # Prepare the content for the prompt
+        content_parts = []
+        if transcript is not None:
+            content_parts.append(f"Transcript of the lecture:\n{transcript}")
+        if slides is not None:
+            content_parts.append(f"Slides from the lecture:\n{slides}")
+            
+        content = "\n\n".join(content_parts)
+            
         completion = self.client.chat.completions.create(
             model="meta-llama/llama-4-scout-17b-16e-instruct",
             messages=[
                 {"role": "system", "content": self.system_prompt},
                 {
                     "role": "user",
-                    "content": f"Create a .json that contains notes, quiz, and flashcard objects based on the transcript of a lecture provided here: {transcript}"
+                    "content": f"Return in .json format a response that contains notes, quiz, and flashcard objects based on the following lecture content:\n\n{content}"
                 }
             ],
             temperature=1,
             max_completion_tokens=1024,
             top_p=1,
-            stream=True,
+            stream=False,
+            response_format={"type": "json_object"},
             stop=None,
         )
 
-        full_response = ""
-        for chunk in completion:
-            content = chunk.choices[0].delta.content or ""
-            full_response += content
-            print(content, end="")
-        
-        return full_response
+        try:
+            return json.loads(completion.choices[0].message.content)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Failed to parse JSON response: {e}\nResponse content: {completion.choices[0].message.content}")
