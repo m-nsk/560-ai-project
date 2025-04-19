@@ -8,9 +8,11 @@ class GroqProcessor:
         self.client = client
         self.system_prompt = """You are a helpful AI assistant that creates educational content from lecture transcripts. 
         Your task is to create a structured JSON output containing:
-        1. Key notes from the lecture (in markdown format)
-        2. Quiz questions based on the content
+        1. Detailed notes from the lecture (in markdown format). Follow along and generate in-depth notes for important concepts covered by the professor.
+        2. 10 or more questions based on the content
         3. Flashcards for important concepts
+        
+        Be as helpful as possible.
         
         Format your response as a valid JSON object with the following structure:
         {
@@ -20,16 +22,9 @@ class GroqProcessor:
         }
 
         
-        Note that the slides conversion may contain errors in objects like tables, images, and grahps. Assume the content appropriately in case of errors.
+        Note that the slides conversion may contain errors in objects like tables, images, and graphs. Assume the content appropriately in case of errors.
 
-        For the notes content, use markdown formatting:
-        - Use # for main headings
-        - Use ## for subheadings
-        - Use bullet points (-) for lists
-        - Use ``` for code blocks
-        - Use ** for bold text
-        - Use * for italic text
-        - Use > for blockquotes
+        For the notes content, use markdown formatting.
         """
 
     @staticmethod
@@ -46,8 +41,10 @@ class GroqProcessor:
         content_parts = []
         if transcript is not None:
             content_parts.append(f"Transcript of the lecture:\n{self.sanitize_input(transcript)}")
+            print("Using transcript")
         if slides is not None:
             content_parts.append(f"Slides from the lecture:\n{self.sanitize_input(slides)}")
+            print("Using slides")
             
         content = "\n\n".join(content_parts)
             
@@ -57,7 +54,7 @@ class GroqProcessor:
                 {"role": "system", "content": self.system_prompt},
                 {
                     "role": "user",
-                    "content": f"Based on the following lecture content, generate ONLY a valid JSON object with three top-level keys: 'notes', 'quiz', and 'flashcards'.\n\nDo not include explanations or preambles. Your entire response must be valid JSON.\n\nLecture content:\n\n{content}"
+                    "content": f"Based on the following lecture content, generate ONLY a VALID JSON object with three top-level keys: 'notes', 'quiz', and 'flashcards'.\n\nDo not include explanations or preambles. Your entire response must be valid JSON.\n\nLecture content:\n\n{content}"
                 }
             ],
             temperature=1,
