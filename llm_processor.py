@@ -1,6 +1,6 @@
 import json
 from groq import Groq
-import os
+import re
 from dotenv import load_dotenv
 
 class GroqProcessor:
@@ -19,6 +19,9 @@ class GroqProcessor:
             "flashcards": [{"front": "string", "back": "string"}]
         }
 
+        
+        Note that the slides conversion may contain errors in objects like tables, images, and grahps. Assume the content appropriately in case of errors.
+
         For the notes content, use markdown formatting:
         - Use # for main headings
         - Use ## for subheadings
@@ -29,6 +32,12 @@ class GroqProcessor:
         - Use > for blockquotes
         """
 
+    @staticmethod
+    def sanitize_input(text: str) -> str:
+        text = text.replace("\u200b", "")  # Remove zero-width spaces
+        text = re.sub(r'\\', '', text)     # Remove stray backslashes
+        return text.strip()
+
     def process_transcript(self, transcript: str | None = None, slides: str | None = None) -> dict:
         if transcript is None and slides is None:
             raise ValueError("At least one of transcript or slides must be provided")
@@ -36,9 +45,9 @@ class GroqProcessor:
         # Prepare the content for the prompt
         content_parts = []
         if transcript is not None:
-            content_parts.append(f"Transcript of the lecture:\n{transcript}")
+            content_parts.append(f"Transcript of the lecture:\n{self.sanitize_input(transcript)}")
         if slides is not None:
-            content_parts.append(f"Slides from the lecture:\n{slides}")
+            content_parts.append(f"Slides from the lecture:\n{self.sanitize_input(slides)}")
             
         content = "\n\n".join(content_parts)
             
@@ -48,7 +57,7 @@ class GroqProcessor:
                 {"role": "system", "content": self.system_prompt},
                 {
                     "role": "user",
-                    "content": f"Return in .json format a response that contains notes, quiz, and flashcard objects based on the following lecture content:\n\n{content}"
+                    "content": f"Based on the following lecture content, generate ONLY a valid JSON object with three top-level keys: 'notes', 'quiz', and 'flashcards'.\n\nDo not include explanations or preambles. Your entire response must be valid JSON.\n\nLecture content:\n\n{content}"
                 }
             ],
             temperature=1,
