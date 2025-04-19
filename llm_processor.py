@@ -1,0 +1,65 @@
+import json
+from groq import Groq
+import os
+from dotenv import load_dotenv
+
+class GroqProcessor:
+    def __init__(self, client: Groq):
+        self.client = client
+        self.system_prompt = """You are a helpful AI assistant that creates educational content from lecture transcripts. 
+        Your task is to create a structured JSON output containing:
+        1. Key notes from the lecture (in markdown format)
+        2. Quiz questions based on the content
+        3. Flashcards for important concepts
+        
+        Format your response as a valid JSON object with the following structure:
+        {
+            "notes": [{"title": "string", "content": "markdown string with proper formatting (headings, lists, code blocks, etc.)"}],
+            "quiz": [{"question": "string", "options": ["string"], "correct_answer": "string"}],
+            "flashcards": [{"front": "string", "back": "string"}]
+        }
+
+        For the notes content, use markdown formatting:
+        - Use # for main headings
+        - Use ## for subheadings
+        - Use bullet points (-) for lists
+        - Use ``` for code blocks
+        - Use ** for bold text
+        - Use * for italic text
+        - Use > for blockquotes
+        """
+
+    def process_transcript(self, transcript: str | None = None, slides: str | None = None) -> dict:
+        if transcript is None and slides is None:
+            raise ValueError("At least one of transcript or slides must be provided")
+            
+        # Prepare the content for the prompt
+        content_parts = []
+        if transcript is not None:
+            content_parts.append(f"Transcript of the lecture:\n{transcript}")
+        if slides is not None:
+            content_parts.append(f"Slides from the lecture:\n{slides}")
+            
+        content = "\n\n".join(content_parts)
+            
+        completion = self.client.chat.completions.create(
+            model="meta-llama/llama-4-scout-17b-16e-instruct",
+            messages=[
+                {"role": "system", "content": self.system_prompt},
+                {
+                    "role": "user",
+                    "content": f"Return in .json format a response that contains notes, quiz, and flashcard objects based on the following lecture content:\n\n{content}"
+                }
+            ],
+            temperature=1,
+            max_completion_tokens=1024,
+            top_p=1,
+            stream=False,
+            response_format={"type": "json_object"},
+            stop=None,
+        )
+
+        try:
+            return json.loads(completion.choices[0].message.content)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Failed to parse JSON response: {e}\nResponse content: {completion.choices[0].message.content}")
