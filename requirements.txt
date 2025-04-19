@@ -1,1 +1,1 @@
-openai-whisper==20240930
+pymupdf4llm==0.0.21

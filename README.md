@@ -2,4 +2,5 @@
 #### Connor Hall, Lucas Jorgensen, Minjae Kung
 
 ### Requirements:
-`.env` file with `GROQ_API_KEY={api_key}`
+- `.env` file with `GROQ_API_KEY={api_key}`
+- `pymupdf4llm`
