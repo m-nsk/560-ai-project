@@ -6,26 +6,73 @@ from dotenv import load_dotenv
 class GroqProcessor:
     def __init__(self, client: Groq):
         self.client = client
-        self.system_prompt = """You are a helpful AI assistant that creates educational content from lecture transcripts. 
-        Your task is to create a structured JSON output containing:
-        1. Detailed notes from the lecture (in markdown format). Follow along and generate in-depth notes for important concepts covered by the professor.
-        2. 10 or more questions based on the content
-        3. Flashcards for important concepts
+        self.system_prompt = f"""You are a helpful AI assistant that creates detailed, structured educational content from lecture transcripts and/or slides.
+        You must return a valid JSON object that adheres to the following schema:
+        {json.dumps({
+            "type": "object",
+            "properties": {
+                "notes": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "title": {"type": "string"},
+                            "content": {
+                                "type": "string",
+                                "description": "Markdown-formatted content with proper structure"
+                            }
+                        },
+                        "required": ["title", "content"]
+                    }
+                },
+                "quiz": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "question": {"type": "string"},
+                            "options": {
+                                "type": "array",
+                                "items": {"type": "string"}
+                            },
+                            "correct_answer": {"type": "string"}
+                        },
+                        "required": ["question", "options", "correct_answer"]
+                    }
+                },
+                "flashcards": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "front": {"type": "string"},
+                            "back": {"type": "string"}
+                        },
+                        "required": ["front", "back"]
+                    }
+                }
+            },
+            "required": ["notes", "quiz", "flashcards"]
+        }, ensure_ascii=False, indent=2)}
         
-        Be as helpful as possible.
+        Generate detailed and lengthy notes based on what the lecturer talks about in the lecture transcript and lecture slides (if they are provided).
+        The notes should take up most of the response, as it is the most important feature.
         
-        Format your response as a valid JSON object with the following structure:
-        {
-            "notes": [{"title": "string", "content": "markdown string with proper formatting (headings, lists, code blocks, etc.)"}],
-            "quiz": [{"question": "string", "options": ["string"], "correct_answer": "string"}],
-            "flashcards": [{"front": "string", "back": "string"}]
-        }
+        Generate at least 10 quiz questions.
+        Generate flash cards based on keywords in the lecture.
 
-        
-        Note that the slides conversion may contain errors in objects like tables, images, and graphs. Assume the content appropriately in case of errors.
+        Instructions for formatting:
+        - Notes should use **Markdown syntax**:
+        - Use `#` for main headings and `##` for subheadings
+        - Use `-` for bullet points
+        - Use triple backticks (```) for code blocks
+        - Use LaTeX formatting, `**bold**`, `*italic*`, and `> blockquotes` when appropriate
 
-        For the notes content, use markdown formatting.
+        Assume some errors or omissions may exist in slide content (e.g., missing tables, graphs). Use best judgment to infer or reconstruct meaning if necessary.
+
+        Do not include any explanation, preamble, or extra text—only return a valid JSON object matching the above schema.
         """
+
 
     @staticmethod
     def sanitize_input(text: str) -> str:
@@ -57,12 +104,12 @@ class GroqProcessor:
                     "content": f"Based on the following lecture content, generate ONLY a VALID JSON object with three top-level keys: 'notes', 'quiz', and 'flashcards'.\n\nDo not include explanations or preambles. Your entire response must be valid JSON.\n\nLecture content:\n\n{content}"
                 }
             ],
-            temperature=1,
-            max_completion_tokens=1024,
+            temperature=0.5,
+            max_completion_tokens=8192,
             top_p=1,
             stream=False,
             response_format={"type": "json_object"},
-            stop=None,
+            stop=["}END_JSON"],
         )
 
         try:
