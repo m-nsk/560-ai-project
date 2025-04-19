@@ -2,5 +2,4 @@
 #### Connor Hall, Lucas Jorgensen, Minjae Kung
 
 ### Requirements:
-Whisper
-- ffmpeg
+`.env` file with `GROQ_API_KEY={api_key}`
