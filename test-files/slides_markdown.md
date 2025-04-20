@@ -16,9 +16,7 @@
 
 ### |M | . Furthermore, each vertex in OPT can cover at most one edge in M, so | OPT | ≥|M | . Thus, | ALG | = 2 · |M | ≤ 2 · | OPT | .
 ## **8.2 Load Balancing**
-### Scheduling is a rich topic with many applications. In a typical scheduling problem, there are n jobs and m machines, and we need to assign each job to a machine. Every job has a length, and the load on a machine is the sum of the lengths of the jobs assigned to that machine. The makespan of an assignment is the maximum load created by that assignment.
-
-### Algorithm: The algorithm is greedy: iterate through the jobs (in any order), assigning each one to the machine with the smallest load so far.
+### Scheduling is a rich topic with many applications. In a typical scheduling problem, there are n jobs and m machines, and we need to assign each job to a machine. Every job has a length, and the load on a machine is the sum of the lengths of the jobs assigned to that machine. The makespan of an assignment is the maximum load created by that assignment. Algorithm: The algorithm is greedy: iterate through the jobs (in any order), assigning each one to the machine with the smallest load so far.
 
 
 ### Correctness: Suppose ALG achieves a makespan of T, the load of i ∈ [ m ] is T, and k was the last job assigned to i . When ALG assigned k to i, i had the smallest load. This means the load on every machine is at least T − ℓ [ k ], so [�] [n] j =1 [ℓ] [[] [j] []] [ ≥] [m] [(] [T][ −] [ℓ] [[] [k] []). Rearranging yields]

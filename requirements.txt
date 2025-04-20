@@ -1,1 +1,2 @@
 pymupdf4llm==0.0.21
+genanki==0.13.1
