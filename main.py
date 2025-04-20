@@ -5,6 +5,7 @@ from llm_processor import GroqProcessor
 from groq import Groq
 import pymupdf4llm
 import json
+from flashcards_maker import generate_anki_deck
 
 load_dotenv()
 
@@ -30,7 +31,7 @@ with open("./test-files/slides_markdown.md", "w", encoding="utf-8") as f:
     f.write(slides)
 
 llm_processor = GroqProcessor(groq_client)
-result = llm_processor.process_transcript(transcript=transcript, slides=slides)
+result = llm_processor.process_transcript(transcript=transcript, slides=slides) # TODO: LLM request can fail randomly because of json validation
 
 # TODO: parse these into actual files instead of just debug output
 print("\n=== Notes ===")
@@ -47,8 +48,6 @@ for i, question in enumerate(result["quiz"], 1):
         print(f"- {option}")
     print(f"Correct Answer: {question['correct_answer']}")
 
-print("\n=== Flashcards ===")
-for i, card in enumerate(result["flashcards"], 1):
-    print(f"\nCard {i}:")
-    print(f"Front: {card['front']}")
-    print(f"Back: {card['back']}")
+# Generate Anki deck from response
+topic_name = "550-8.1-8.2"
+generate_anki_deck(result["flashcards"], topic_name)
