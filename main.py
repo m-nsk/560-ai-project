@@ -6,6 +6,7 @@ from groq import Groq
 import pymupdf4llm
 import json
 from flashcards_maker import generate_anki_deck
+from note_to_pdf_conversion import notes_to_pdf
 
 load_dotenv()
 
@@ -47,11 +48,15 @@ while True:
 #result = llm_processor.process_transcript(transcript=transcript, slides=slides) # TODO: LLM request can fail randomly because of json validation
 
 # TODO: parse these into actual files instead of just debug output
-print("\n=== Notes ===")
-for note in result["notes"]:
-    print(f"\nTitle: {note['title']}")
-    print("Content:")
-    print(note['content'])
+
+# Method call to convert notes markdown to a LaTeX PDF
+notes_to_pdf(result["notes"])
+
+#print("\n=== Notes ===")
+#for note in result["notes"]:
+#    print(f"\nTitle: {note['title']}")
+#    print("Content:")
+#    print(note['content'])
 
 print("\n=== Quiz Questions ===")
 for i, question in enumerate(result["quiz"], 1):
