@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from transcriber import GroqTranscriber, LocalTranscriber
+from transcriber import GroqTranscriber
 from llm_processor import GroqProcessor
 from groq import Groq
 import pymupdf4llm
@@ -31,7 +31,20 @@ with open("./test-files/slides_markdown.md", "w", encoding="utf-8") as f:
     f.write(slides)
 
 llm_processor = GroqProcessor(groq_client)
-result = llm_processor.process_transcript(transcript=transcript, slides=slides) # TODO: LLM request can fail randomly because of json validation
+
+# Primitive fix to LLm request failing randomly -> Continues trying until valid response
+counter = 0
+while True:
+    counter += 1
+    try:
+        result = llm_processor.process_transcript(transcript=transcript, slides=slides)
+        print(f"LLM request made successfully after {counter:02d} attempts.")
+        counter = 0
+        break
+    except Exception:
+        continue
+
+#result = llm_processor.process_transcript(transcript=transcript, slides=slides) # TODO: LLM request can fail randomly because of json validation
 
 # TODO: parse these into actual files instead of just debug output
 print("\n=== Notes ===")
