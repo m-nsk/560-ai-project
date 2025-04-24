@@ -6,63 +6,75 @@ from dotenv import load_dotenv
 class GroqProcessor:
     def __init__(self, client: Groq):
         self.client = client
-        self.system_prompt = f"""You are a helpful AI assistant that creates structured educational content from lecture transcripts and/or slides.
-        You must return a valid JSON object that adheres to the following schema:
+        self.system_prompt = f"""You are a precise AI assistant that generates structured academic content from lecture transcripts and slides. You must return a **valid JSON object** using the schema below.
+
+        The JSON must contain:
+        1. `notes`: Very detailed LaTeX-formatted lecture notes, notes should be written at a college-level (no preamble)
+        2. `quiz`: EXACTLY 10 multiple-choice questions derived from the input material (LaTeX)
+        3. `answer-key`: Correct answers for ALL quiz questions (LaTeX)
+        4. `flashcards`: JSON array of front/back string pairs
+
+        Here is the schema:
         {json.dumps({
             "type": "object",
             "properties": {
-                "notes": {
-                    "type": "string",
-                    "description": "A complete LaTeX document EXCLUDING the preamble that contains detailed lecture notes. DO NOT USE MARKDOWN. WE ARE USING LATEX."
-                },
-                "quiz": {
-                    "type": "string",
-                    "description": "A complete LaTeX document EXCLUDING the preamble that contains a multiple choice quiz with at least 10 questions"
-                },
-                "answer-key": {
-                    "type": "string",
-                    "description": "A complete LaTeX document EXCLUDING the preamble that contains answers to the multiple choice quiz above"
-                },
+                "notes": {"type": "string"},
+                "quiz": {"type": "string"},
+                "answer-key": {"type": "string"},
                 "flashcards": {
                     "type": "array",
                     "items": {
                         "type": "object",
-                        "properties": {
-                            "front": {"type": "string"},
-                            "back": {"type": "string"}
-                        },
+                        "properties": {"front": {"type": "string"}, "back": {"type": "string"}},
                         "required": ["front", "back"]
                     }
                 }
             },
-            "required": ["notes", "quiz", "flashcards"]
-        }, ensure_ascii=False, indent=2)}
+            "required": ["notes", "quiz", "answer-key", "flashcards"]
+        }, indent=2)}
 
-        Instructions:
-        - Return a **valid JSON object** with three top-level keys: `notes`, `quiz`, `answer-key`, and `flashcards`.
-        - `notes` and `quiz` must each be a **LaTeX document**, starting with `\\begin{{document}}` and `\\end{{document}}`.
-        - Use proper LaTeX formatting:
-        - NO SPECIAL UNICODE CHARACTERS. If you encounter characters like α, use the latex version \\alpha.
-        - `\\section{{}}`, `\\subsection{{}}` for structure
-        - `\\begin{{itemize}}` or `\\begin{{enumerate}}` for lists
-        - `$...$` or `\\[ ... \\]` for math
-        - Use `\\textbf{{}}`, `\\textit{{}}`, `\\begin{{quote}}`, etc. for emphasis
-        - For the **quiz**, include EXACTLY 10 multiple choice questions using `enumerate`, with lettered choices (A, B, C...). Then on a new page, write out the answers to each problem.
-        - Flashcards should remain a structured array of front/back string pairs.
-        - Do not include any explanation, comments, or preamble outside the JSON object.
-        - This is the preamble that is already provided:
-        ```latex
-        \\documentclass[11pt]{{article}}
-        \\usepackage[utf8]{{inputenc}}
-        \\usepackage{{amsmath, amssymb}}
-        \\usepackage{{enumitem}}
-        \\usepackage{{graphicx}}
-        \\usepackage{{geometry}}
-        \\usepackage{{hyperref}}
-        \\usepackage{{xcolor}}
+        --- LaTeX Formatting Rules ---
 
-        \\geometry{{margin=1in}}
+        --- NOTES ---
+        - Must be a valid LaTeX document with:
+        - `\\begin{{document}}` and `\\end{{document}}`
+        - `\\section{{}}`, `\\subsection{{}}`, `\\subsubsection{{}}` for hierarchy
+        - Definitions labeled with `\\textbf{{Definition:}}`, claims with `\\textbf{{Claim:}}`, and proofs with `\\textit{{Proof:}}`
+        - Use `\\begin{{itemize}}` or `\\begin{{enumerate}}` for bullets
+        - Math formatted properly with `$...$` for inline and `\\[...\\]` for display
+        - Emphasize keywords (`\\textbf`, `\\textit`) and use spacing (`\\vspace`, `\\noindent`) to improve readability
+        - Mimic clean, human-written academic notes. No AI-generic structure or plain walls of text
+
+        --- QUIZ ---
+        - Must be a valid LaTeX document with:
+        - '\\begin{{document}}' and '\\end{{document}}'
+        - Exactly 10 multiple-choice questions using:
+        - `\\begin{{enumerate}}`
+        - After the 10 questions, make sure to end the quiz with:
+        - '\\end{{enumerate}}'
+        - For each question, answer choices should be formatted in a list
+        - Each question with four options: (A), (B), (C), (D)
+        - All questions must be answerable from the input material and written at a college difficulty level
+
+        --- ANSWER KEY ---
+        - Must be a valid LaTeX document with:
+        - '\\begin{{document}}' and '\\end{{document}}'
+        - Must always include an answer key that directly follows the quiz questions.
+        - Use `\\newpage` to begin answer key
+        - List answers clearly: `1. (B)`, `2. (C)`, … `10. (A)`
+        - Answers should be correct and accurate
+        - Must include all 10 answers and be easy to match back to the quiz
+
+        --- FLASHCARDS ---
+        - Maintain current format: JSON array with "front" and "back" strings
+
+        --- GENERAL ---
+        - No Markdown or Unicode symbols (e.g., use `\\alpha` instead of α)
+        - Do not output anything except the valid JSON object
+        - Do not include LaTeX preamble; this is added later
+
         """
+
 
     @staticmethod
     def sanitize_input(text: str) -> str:

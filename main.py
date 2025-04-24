@@ -71,6 +71,9 @@ print(result["notes"])
 print("\n=== Quiz Questions ===")
 print(result["quiz"])
 
+print("\n=== Answer Key ===")
+print(result["answer-key"])
+
 
 def wrap_latex(preamble: str, document: str) -> str:
     return f"{preamble}\n{document}"
@@ -83,6 +86,8 @@ with open(f"./generated-files/{topic_name}_notes.tex", "w", encoding="utf-8") as
 with open(f"./generated-files/{topic_name}_quiz.tex", "w", encoding="utf-8") as f:
     f.write(wrap_latex(preamble, result["quiz"]))
 
+with open(f"./generated-files/{topic_name}_answer_key.tex", "w", encoding="utf-8") as f:
+    f.write(wrap_latex(preamble, result["answer-key"]))
 
 # Generate Anki deck from response
 generate_anki_deck(result["flashcards"], topic_name)
