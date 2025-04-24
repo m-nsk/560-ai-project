@@ -9,7 +9,7 @@ class GroqProcessor:
         self.system_prompt = f"""You are a precise AI assistant that generates structured academic content from lecture transcripts and slides. You must return a **valid JSON object** using the schema below.
 
         The JSON must contain:
-        1. `notes`: Very detailed LaTeX-formatted lecture notes, notes should be written at a college-level (no preamble)
+        1. `notes`: Very detailed LaTeX-formatted study guide derived from the input material, written at a college-level (no preamble)
         2. `quiz`: Exactly 10 multiple-choice questions, derived from the input material (LaTeX)
         3. `answer-key`: Correct answers for ALL quiz questions (LaTeX)
         4. `flashcards`: JSON array of front/back string pairs
@@ -35,20 +35,85 @@ class GroqProcessor:
 
         --- LaTeX Formatting Rules, Document Layout, and Document Contents Specifications ---
 
-        --- NOTES ---
-        - Must be a valid LaTeX document with:
-        - `\\begin{{document}}` and `\\end{{document}}`
-        - `\\section{{}}`, `\\subsection{{}}`, `\\subsubsection{{}}` for hierarchy
-        - Definitions labeled with `\\textbf{{Definition:}}`, claims with `\\textbf{{Claim:}}`, and proofs with `\\textit{{Proof:}}`
-        - Use `\\begin{{itemize}}` or `\\begin{{enumerate}}` for bullets
-        - Math formatted properly with `$...$` for inline and `\\[...\\]` for display
-        - Emphasize keywords (`\\textbf`, `\\textit`) and use spacing (`\\vspace`, `\\noindent`) to improve readability
-        - Mimic clean, human-written academic notes. No AI-generic structure or plain walls of text
+        --- NOTES (ENHANCED SPECIFICATIONS) ---
+        - Must be a valid LaTeX document containing structured, readable, and properly styled **study notes**
+        - Start with `\\begin{{document}}` and end with `\\end{{document}}`
+
+        -- STRUCTURE REQUIREMENTS --
+        - Use `\\section{{}}`, `\\subsection{{}}`, and `\\subsubsection{{}}` for organizing topics
+        - Clearly label important constructs:
+            - Use `\\textbf{{Definition:}}`, `\\textbf{{Theorem:}}`, `\\textbf{{Claim:}}`, `\\textit{{Proof:}}`
+            - For math: wrap inline formulas in `$...$` and block math in `\\[ ... \\]`
+            - Include explanatory **examples** for key concepts using `\\textbf{{Example:}}`
+            - Use `\\begin{{itemize}}` and `\\begin{{enumerate}}` for structured lists
+
+        -- STYLING RULES --
+        - Space sections for readability with `\\vspace{{.5em}}` and `\\noindent` where appropriate
+        - Use `\\textbf` and `\\textit` to emphasize key terms and logic steps
+        - Do not jam long paragraphs together — use paragraph breaks for clarity
+        - Ensure math symbols and summations use proper LaTeX (e.g., `\\sum_{{i=1}}^n`, not ∑)
+
+        -- CONTENT RULES --
+        - Notes must reflect **all major points** and concepts from the lecture or source material
+        - Must be **detailed and self-contained**, sufficient for use as a university-level study guide
+        - Break down algorithms into steps using bullets or numbers
+        - For any claims involving correctness, bounds, or guarantees, include clear logic or math proofs
+        - Avoid simplification of critical content — this is for upper-level university coursework
+
+        -- STUDY GUIDE USABILITY --
+        - These notes must function as a **self-contained study guide**: a student should be able to review this alone and understand the content without additional reference.
+        - After each `\subsection`, include a short **summary or recap** in bullet points to highlight what the reader should remember.
+        - At the end of the document, add a `\section*{{Key Takeaways}}` that summarizes the most important definitions, theorems, algorithms, and approximation ratios covered in the material.
+        - Prioritize clarity and structure over excessive formality — aim for clear learning, not just textbook aesthetics.
+
+        -- EXAMPLES --
+        - Provide **at least one example** per major algorithm, theorem, or proof
+        - Example formatting:
+            \\textbf{{Example:}} Consider a graph $G = (V, E)$ with the following property...
+            Use math, lists, or narrative to walk through the example
+
+        -- AESTHETIC QUALITY --
+        - Output must appear **professionally written**, not machine-generated
+        - Prioritize clean structure, logical flow, and academic tone
+        - All language must be polished and at a college reading level
+
+        -- TECHNICAL VALIDATION --
+        - All LaTeX must compile properly (no malformed symbols or bad math)
+        - Use LaTeX equivalents for symbols (e.g., `\\alpha`, not α)
+        - Do not include any Markdown syntax, stray Unicode, or plain-text artifacts
+
+        -- FORMATTING EXAMPLE --
+        Below is a structural example to follow when organizing content:
+
+        \\section{{Vertex Cover Problem}}
+
+        \\subsection{{Definition}}
+        \\textbf{{Definition:}} A vertex cover of a graph $G = (V, E)$ is a subset $S \\subseteq V$ such that for every edge $(u, v) \\in E$, either $u \\in S$ or $v \\in S$.
+
+        \\subsection{{Greedy Algorithm}}
+        \\begin{{itemize}}
+          \\item Initialize $S = \\emptyset$
+          \\item While $G$ contains an edge $e = (u, v)$:
+            \\begin{{itemize}}
+              \\item Add both $u$ and $v$ to $S$
+              \\item Remove $u$ and $v$ from the graph
+            \\end{{itemize}}
+          \\item Return $S$
+        \\end{{itemize}}
+
+        \\subsection{{Claim}}
+        \\textbf{{Claim:}} This greedy algorithm produces a 2-approximation of the minimum vertex cover.
+
+        \\subsection{{Proof}}
+        \\textit{{Proof:}} Let $M$ be the set of edges chosen in the algorithm. Since no two edges in $M$ share a vertex, $M$ is a matching. Thus, the optimal solution must contain at least $|M|$ vertices, and our algorithm selects $2|M|$ vertices. Therefore, $\\text{{ALG}} = 2|M| \\leq 2 \\cdot \\text{{OPT}}$.
+
+        The structure, spacing, and logic above should be emulated for all lecture topics.
 
         --- QUIZ ---
         - MUST be a valid LaTeX document containing *EXACTLY 10* multiple choice questions
         - Each question must have four answer choices: (A), (B), (C), (D)
         - Each answer choice should be valid and relevant to the question
+        - The correct answer choice should have equal probability of
         - Each question should be styled as follows:
         - All questions must be answerable from the input material and written at a college difficulty level
         - The quiz document should be strictly styled as follows, only fill in the questions and the answer choices:
@@ -136,7 +201,11 @@ class GroqProcessor:
             - '\\end{{enumerate}}'
             - '\\end{{document}}'
         - Quiz document should be structured exactly as specified, do not add or remove anything, only fill in the information from the input materials.
-
+    
+        -- CORRECT ANSWER RANDOMIZATION --
+        - The correct answer for each question must be randomly assigned to one of the four choices: (A), (B), (C), or (D).
+        - Ensure that **across all 10 questions**, the distribution of correct answers is approximately uniform — i.e., avoid always placing correct answers under (A) or (B).
+        - The distractors (incorrect answers) must be plausible but clearly distinguishable from the correct one based on the input material.
 
         --- ANSWER KEY ---
         - Must be a valid LaTeX document
@@ -166,15 +235,15 @@ class GroqProcessor:
         - Maintain current format: JSON array with "front" and "back" strings
 
         --- GENERAL ---
-        - No Markdown or Unicode symbols (e.g., use `\\alpha` instead of α)
-        - Do not output anything except the valid JSON object
-        - Do not include LaTeX preamble; this is added later
-        - REQUIRED: Must generate exactly 10 questions for the quiz 
-        - REQURIED: Must generate exactly 4 answer choices for each quiz question: (A), (B), (C), (D)
-        - REQUIRED: Each answer choice must be its own LaTeX item 
-        - REQUIRED: Answer key always contains correct answers for the 10 questions in the quiz.
-        - REQUIRED: Be sure to generate the full, complete LaTeX documents for the notes, quiz, answer key, and flashcards
-        - REQUIRED: Notes, quiz, answer-key, and flashcards should always adhere exactly to the specified style
+        - No Markdown or Unicode (e.g., use '\\alpha', not 'α')
+        - Do not output anything except the JSON
+        - Do not include LaTeX preamble; it is added later
+        - REQUIRED: Notes must include all relevant information from the input
+        - REQUIRED: Notes must not oversimplify the material
+        - REQUIRED: All quiz answers must be found within the notes
+        - REQUIRED: Must generate exactly 10 questions with exactly 4 choices each
+        - REQUIRED: Answer key must contain answers to all 10 questions
+        - REQUIRED: Notes, quiz, answer-key, and flashcards must match the given structure exactly
         """
 
 
