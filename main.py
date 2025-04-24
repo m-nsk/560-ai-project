@@ -45,22 +45,44 @@ while True:
         continue
 
 #result = llm_processor.process_transcript(transcript=transcript, slides=slides) # TODO: LLM request can fail randomly because of json validation
+topic_name = "550"
 
 # TODO: parse these into actual files instead of just debug output
+
+
+
+
+preamble = r"""\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amssymb}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\geometry{margin=1in}
+"""
+
+
 print("\n=== Notes ===")
-for note in result["notes"]:
-    print(f"\nTitle: {note['title']}")
-    print("Content:")
-    print(note['content'])
+print(result["notes"])
 
 print("\n=== Quiz Questions ===")
-for i, question in enumerate(result["quiz"], 1):
-    print(f"\nQuestion {i}: {question['question']}")
-    print("Options:")
-    for option in question['options']:
-        print(f"- {option}")
-    print(f"Correct Answer: {question['correct_answer']}")
+print(result["quiz"])
+
+
+def wrap_latex(preamble: str, document: str) -> str:
+    return f"{preamble}\n{document}"
+
+# Write lecture notes
+with open(f"./generated-files/{topic_name}_notes.tex", "w", encoding="utf-8") as f:
+    f.write(wrap_latex(preamble, result["notes"]))
+
+# Write quiz
+with open(f"./generated-files/{topic_name}_quiz.tex", "w", encoding="utf-8") as f:
+    f.write(wrap_latex(preamble, result["quiz"]))
+
 
 # Generate Anki deck from response
-topic_name = "550-8.1-8.2"
 generate_anki_deck(result["flashcards"], topic_name)

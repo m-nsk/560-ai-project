@@ -4,10 +4,8 @@
 
 
 
-
 ### A α-approximation algorithm is a polynomial-time algorithm that always returns a solution whose value ALG is within a factor α of the optimal value OPT. In other words, for minimization problems, there exists α ≥ 1 such that ALG satisfies the following on every instance: OPT ≤ ALG ≤ α · OPT . The approximation ratio of an algorithm is the smallest α such that the algorithm is an α - approximation algorithm. Proving that an α -approximation algorithm is “correct” means showing that the algorithm satisfies ALG ≤ α · OPT on every instance. (For maximization problems, we flip the inequalities above, so α ≤ 1 and we want OPT ≥ ALG ≥ α · OPT.)
 ## **8.1 Vertex Cover**
-
 
 
 
