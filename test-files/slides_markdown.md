@@ -10,7 +10,6 @@
 
 
 
-
 ### Algorithm: Set S = ∅ . If G has an edge e = {u, v}, add both endpoints of e to S, and remove u and v from G . (Note that when we remove a ver- tex from a graph, we also remove all edges incident to the vertex.) Repeat this process until G has no edges and return S . Correctness: Notice that the edges considered by the algorithm form a matching M, so | ALG | = 2 · 45
 
 

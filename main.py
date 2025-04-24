@@ -6,6 +6,7 @@ from groq import Groq
 import pymupdf4llm
 import json
 from flashcards_maker import generate_anki_deck
+from pdf_to_latex import compile_tex_to_pdf
 
 load_dotenv()
 
@@ -88,6 +89,10 @@ with open(f"./generated-files/{topic_name}_quiz.tex", "w", encoding="utf-8") as 
 
 with open(f"./generated-files/{topic_name}_answer_key.tex", "w", encoding="utf-8") as f:
     f.write(wrap_latex(preamble, result["answer-key"]))
+    
+for suffix in ["notes", "quiz", "answer_key"]:
+    tex_file = f"./generated-files/{topic_name}_{suffix}.tex"
+    compile_tex_to_pdf(tex_file)
 
 # Generate Anki deck from response
 generate_anki_deck(result["flashcards"], topic_name)
