@@ -40,7 +40,7 @@ def process(pdf_path, audio_path, topic_name):
     # transcript = localTranscriber.transcribe(filename)
     # print(transcript)
 
-    with open(f"demo-files/{audio_path}.txt", "r") as f:
+    with open(f"demo-files/{audio_path[:len(audio_path-3)]}txt", "r") as f:
         transcript = f.read() # TODO: the transcript is being fed manually just so we don't have to call Whisper every time. The above whisper code works!
 
     slides = None
