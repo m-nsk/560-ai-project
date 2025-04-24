@@ -12,72 +12,66 @@
 \begin{document}
 
 \begin{enumerate}
+
 \item What is the main goal of approximation algorithms?
-(A) To find the optimal solution
-(B) To find a solution close to optimal
-(C) To reduce the running time
-(D) To increase the memory usage
-
-\item What is the approximation ratio of an algorithm?
-(A) The smallest $\alpha$ such that $ALG \leq \alpha \cdot OPT$
-(B) The largest $\alpha$ such that $ALG \geq \alpha \cdot OPT$
-(C) The average load of the machines
-(D) The maximum load of the machines
-
-\item What is the goal of the vertex cover problem?
-(A) To find a minimum subset of vertices that covers all edges
-(B) To find a maximum subset of vertices that covers all edges
-(C) To find a minimum subset of edges that covers all vertices
-(D) To find a maximum subset of edges that covers all vertices
-
-\item What is the algorithm for vertex cover?
-(A) Add one endpoint of each edge to $S$
-(B) Add both endpoints of each edge to $S$
-(C) Remove one endpoint of each edge from $G$
-(D) Remove both endpoints of each edge from $G$
-
-\item What is the approximation ratio of the vertex cover algorithm?
-(A) 1
-(B) 2
-(C) 3
-(D) 4
-
-\item What is the goal of the load balancing problem?
-(A) To minimize the average load
-(B) To minimize the maximum load
-(C) To maximize the average load
-(D) To maximize the maximum load
-
-\item What is the algorithm for load balancing?
-(A) Assign each job to the machine with the largest load
-(B) Assign each job to the machine with the smallest load
-(C) Assign each job to a random machine
-(D) Assign each job to the machine with the most jobs
-
-\item What is the approximation ratio of the load balancing algorithm?
-(A) 1
-(B) 2
-(C) 3
-(D) $2 - \frac{1}{m}$
-
-\item What is the makespan of an assignment?
-(A) The minimum load created by that assignment
-(B) The maximum load created by that assignment
-(C) The average load created by that assignment
-(D) The total load created by that assignment
-
-\item What is the optimal makespan?
-(A) The minimum makespan over all assignments
-(B) The maximum makespan over all assignments
-(C) The average makespan over all assignments
-(D) The total makespan over all assignments
-
-\item What is the relationship between $T$ and $T^*$?
-(A) $T \leq T^*$
-(B) $T \geq T^*$
-(C) $T \leq 2T^*$
-(D) $T \geq 2T^*$
-
+\begin{enumerate}
+\item[A] To find the optimal solution
+\item[B] To find a solution close to optimal
+\item[C] To reduce the running time
+\item[D] To increase the memory usage
 \end{enumerate}
 
-\end{document}
+\item What is the approximation ratio of an algorithm?
+\begin{enumerate}
+\item[A] The smallest $\alpha$ such that the algorithm is an $\alpha$-approximation algorithm
+\item[B] The largest $\alpha$ such that the algorithm is an $\alpha$-approximation algorithm
+\item[C] The average running time of the algorithm
+\item[D] The worst-case running time of the algorithm
+\end{enumerate}
+
+\item What is the goal of the vertex cover problem?
+\begin{enumerate}
+\item[A] To find a minimum vertex cover
+\item[B] To find a maximum independent set
+\item[C] To find a minimum dominating set
+\item[D] To find a maximum clique
+\end{enumerate}
+
+\item What is the algorithm for vertex cover?
+\begin{enumerate}
+\item[A] Add one endpoint of each edge to the solution
+\item[B] Add both endpoints of each edge to the solution
+\item[C] Use a greedy approach to select vertices
+\item[D] Use a dynamic programming approach
+\end{enumerate}
+
+\item What is the approximation ratio of the vertex cover algorithm?
+\begin{enumerate}
+\item[A] 1
+\item[B] 2
+\item[C] 3
+\item[D] 4
+\end{enumerate}
+
+\item What is the goal of the load balancing problem?
+\begin{enumerate}
+\item[A] To minimize the maximum load
+\item[B] To maximize the minimum load
+\item[C] To minimize the average load
+\item[D] To maximize the total load
+\end{enumerate}
+
+\item What is the algorithm for load balancing?
+\begin{enumerate}
+\item[A] Assign each job to the machine with the smallest load
+\item[B] Assign each job to the machine with the largest load
+\item[C] Use a greedy approach to select machines
+\item[D] What is the running time of the load balancing algorithm?
+\begin{enumerate}
+\item[A] O(n)
+\item[B] O(n log n)
+\item[C] O(n^2)
+\item[D] O(m \cdot n)
+\end{enumerate}
+
+\end{enumerate}

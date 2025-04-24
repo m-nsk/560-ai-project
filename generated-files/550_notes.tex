@@ -17,24 +17,26 @@ Approximation algorithms don't always return an optimal solution, but their solu
 
 \subsection{Vertex Cover}
 
-A vertex cover of an undirected graph $G = (V, E)$ is a subset $S \subseteq V$ such that for every edge $E \in E$, $u \in S$ or $v \in S$.
+Given an undirected graph $G$, the goal is to return a minimum vertex cover of $G$. A vertex cover is a subset $S$ of $V$ such that for every edge $E$ in $G$, $u$ is in $S$ or $v$ is in $S$.
 
 \textbf{Algorithm:}
-Set $S = \emptyset$. If $G$ has an edge $e = \{u, v\}$, add both endpoints of $e$ to $S$, and remove $u$ and $v$ from $G$. Repeat this process until $G$ has no edges and return $S$.
+
+Set $S = \emptyset$. While $G$ has an edge $e = {u, v}$, add both endpoints of $e$ to $S$, and remove $u$ and $v$ from $G$. Repeat this process until $G$ has no edges and return $S$.
 
 \textit{Proof:}
+
 The edges considered by the algorithm form a matching $M$, so $|ALG| = 2 \cdot |M|$. Furthermore, each vertex in $OPT$ can cover at most one edge in $M$, so $|OPT| \geq |M|$. Thus, $|ALG| = 2 \cdot |M| \leq 2 \cdot |OPT|$.
 
 \subsection{Load Balancing}
 
-The goal is to assign $n$ jobs to $m$ machines to minimize the maximum load.
+Given an array $L$ of $n$ positive integers and a positive integer $m$, the goal is to assign each job to a machine such that the maximum load is minimized.
 
 \textbf{Algorithm:}
+
 Iterate through the jobs (in any order), assigning each one to the machine with the smallest load so far.
 
 \textit{Proof:}
-Suppose $ALG$ achieves a makespan of $T$, the load of $i \in [m]$ is $T$, and $k$ was the last job assigned to $i$. When $ALG$ assigned $k$ to $i$, $i$ had the smallest load. This means the load on every machine is at least $T - \ell[k]$, so $\sum_{j=1}^n \ell[j] \geq m(T - \ell[k])$. Rearranging yields $T \leq \frac{\sum_{j=1}^n \ell[j]}{m} + \ell[k]$.
 
-Now let $T^*$ denote the optimal makespan. Since the average load in any assignment is $\frac{\sum_{j=1}^n \ell[j]}{m}$, we have $T^* \geq \frac{\sum_{j=1}^n \ell[j]}{m}$. Combining this with the inequality above, we get $T \leq \frac{\sum_{j=1}^n \ell[j]}{m} + \ell[k] \leq T^* + T^* = 2T^*$.
+Suppose $ALG$ achieves a makespan of $T$, the load of $i \in [m]$ is $T$, and $k$ was the last job assigned to $i$. When $ALG$ assigned $k$ to $i$, $i$ had the smallest load. This means the load on every machine is at least $T - \ell[k]$, so $\sum_{j=1}^{n} \ell[j] \geq m(T - \ell[k]$. Rearranging yields $T \leq \frac{\sum_{j=1}^{n} \ell[j]}{m} + \ell[k]$.
 
 \end{document}

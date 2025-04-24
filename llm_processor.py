@@ -10,7 +10,7 @@ class GroqProcessor:
 
         The JSON must contain:
         1. `notes`: Very detailed LaTeX-formatted lecture notes, notes should be written at a college-level (no preamble)
-        2. `quiz`: EXACTLY 10 multiple-choice questions derived from the input material (LaTeX)
+        2. `quiz`: Exactly 10 multiple-choice questions, derived from the input material (LaTeX)
         3. `answer-key`: Correct answers for ALL quiz questions (LaTeX)
         4. `flashcards`: JSON array of front/back string pairs
 
@@ -46,15 +46,26 @@ class GroqProcessor:
         - Mimic clean, human-written academic notes. No AI-generic structure or plain walls of text
 
         --- QUIZ ---
-        - Must be a valid LaTeX document with:
-        - '\\begin{{document}}' and '\\end{{document}}'
+        - MUST be a valid LaTeX document containing *EXACTLY 10* multiple choice questions with:
+        - '\\begin{{document}}' at the start of the contents
         - Exactly 10 multiple-choice questions using:
         - `\\begin{{enumerate}}`
         - After the 10 questions, make sure to end the quiz with:
         - '\\end{{enumerate}}'
-        - For each question, answer choices should be formatted in a list
-        - Each question with four options: (A), (B), (C), (D)
+        - Each question must have four answer choices: (A), (B), (C), (D)
+        - Each answer choice should be valid and relevant to the question
+        - Each question should be styled as follows:
+            - '\\item (question)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (answer choice A)'
+            - '\\item[B] (answer choice B)'
+            - '\\item[C] (answer choice C)'
+            - '\\item[D] (answer choice D)'
+            - '\\end{{enumerate}}'
+            - Newline
         - All questions must be answerable from the input material and written at a college difficulty level
+        - Must be a valid LaTeX document with:
+        - '\\end{{document}}' at the end of the contents
 
         --- ANSWER KEY ---
         - Must be a valid LaTeX document with:
@@ -62,6 +73,8 @@ class GroqProcessor:
         - Must always include an answer key that directly follows the quiz questions.
         - Use `\\newpage` to begin answer key
         - List answers clearly: `1. (B)`, `2. (C)`, … `10. (A)`
+        - Each answer should be styled as follows:
+            - '\\item[(question number)] (correct answer choice)'
         - Answers should be correct and accurate
         - Must include all 10 answers and be easy to match back to the quiz
 
@@ -72,7 +85,12 @@ class GroqProcessor:
         - No Markdown or Unicode symbols (e.g., use `\\alpha` instead of α)
         - Do not output anything except the valid JSON object
         - Do not include LaTeX preamble; this is added later
-
+        - REQUIRED: Must generate exactly 10 questions for the quiz 
+        - REQURIED: Must generate exactly 4 answer choices for each quiz question: (A), (B), (C), (D)
+        - REQUIRED: Each answer choice must be its own LaTeX item 
+        - REQUIRED: Answer key always contains correct answers for the 10 questions in the quiz.
+        - REQUIRED: Be sure to generate the full, complete LaTeX documents for the notes, quiz, answer key, and flashcards
+        - REQUIRED: Quiz questions and answer key should always adhere exactly to the specified style
         """
 
 
