@@ -33,7 +33,7 @@ class GroqProcessor:
             "required": ["notes", "quiz", "answer-key", "flashcards"]
         }, indent=2)}
 
-        --- LaTeX Formatting Rules ---
+        --- LaTeX Formatting Rules, Document Layout, and Document Contents Specifications ---
 
         --- NOTES ---
         - Must be a valid LaTeX document with:
@@ -46,37 +46,121 @@ class GroqProcessor:
         - Mimic clean, human-written academic notes. No AI-generic structure or plain walls of text
 
         --- QUIZ ---
-        - MUST be a valid LaTeX document containing *EXACTLY 10* multiple choice questions with:
-        - '\\begin{{document}}' at the start of the contents
-        - Exactly 10 multiple-choice questions using:
-        - `\\begin{{enumerate}}`
-        - After the 10 questions, make sure to end the quiz with:
-        - '\\end{{enumerate}}'
+        - MUST be a valid LaTeX document containing *EXACTLY 10* multiple choice questions
         - Each question must have four answer choices: (A), (B), (C), (D)
         - Each answer choice should be valid and relevant to the question
         - Each question should be styled as follows:
-            - '\\item (question)'
-            - '\\begin{{enumerate}}'
-            - '\\item[A] (answer choice A)'
-            - '\\item[B] (answer choice B)'
-            - '\\item[C] (answer choice C)'
-            - '\\item[D] (answer choice D)'
-            - '\\end{{enumerate}}'
-            - Newline
         - All questions must be answerable from the input material and written at a college difficulty level
-        - Must be a valid LaTeX document with:
-        - '\\end{{document}}' at the end of the contents
+        - The quiz document should be strictly styled as follows, only fill in the questions and the answer choices:
+            - '\\begin{{document}}'
+            - '\\begin{{enumerate}}'
+            - '\\item (Question 1)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (question 1 answer choice A)'
+            - '\\item[B] (question 1 answer choice B)'
+            - '\\item[C] (question 1 answer choice C)'
+            - '\\item[D] (question 1 answer choice D)'
+            - '\\end{{enumerate}}'
+            - newline
+            - '\\item (Question 2)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (question 2 answer choice A)'
+            - '\\item[B] (question 2 answer choice B)'
+            - '\\item[C] (question 2 answer choice C)'
+            - '\\item[D] (question 2 answer choice D)'
+            - '\\end{{enumerate}}'
+            - newline
+            - '\\item (Question 3)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (question 3 answer choice A)'
+            - '\\item[B] (question 3 answer choice B)'
+            - '\\item[C] (question 3 answer choice C)'
+            - '\\item[D] (question 3 answer choice D)'
+            - '\\end{{enumerate}}'
+            - newline
+            - '\\item (Question 4)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (question 4 answer choice A)'
+            - '\\item[B] (question 4 answer choice B)'
+            - '\\item[C] (question 4 answer choice C)'
+            - '\\item[D] (question 4 answer choice D)'
+            - '\\end{{enumerate}}'
+            - newline
+            - '\\item (Question 5)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (question 5 answer choice A)'
+            - '\\item[B] (question 5 answer choice B)'
+            - '\\item[C] (question 5 answer choice C)'
+            - '\\item[D] (question 5 answer choice D)'
+            - '\\end{{enumerate}}'
+            - newline
+            - '\\item (Question 6)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (question 6 answer choice A)'
+            - '\\item[B] (question 6 answer choice B)'
+            - '\\item[C] (question 6 answer choice C)'
+            - '\\item[D] (question 6 answer choice D)'
+            - '\\end{{enumerate}}'
+            - newline
+            - '\\item (Question 7)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (question 7 answer choice A)'
+            - '\\item[B] (question 7 answer choice B)'
+            - '\\item[C] (question 7 answer choice C)'
+            - '\\item[D] (question 7 answer choice D)'
+            - '\\end{{enumerate}}'
+            - newline
+            - '\\item (Question 8)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (question 8 answer choice A)'
+            - '\\item[B] (question 8 answer choice B)'
+            - '\\item[C] (question 8 answer choice C)'
+            - '\\item[D] (question 8 answer choice D)'
+            - '\\end{{enumerate}}'
+            - newline
+            - '\\item (Question 9)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (question 9 answer choice A)'
+            - '\\item[B] (question 9 answer choice B)'
+            - '\\item[C] (question 9 answer choice C)'
+            - '\\item[D] (question 9 answer choice D)'
+            - '\\end{{enumerate}}'
+            - newline
+            - '\\item (Question 10)'
+            - '\\begin{{enumerate}}'
+            - '\\item[A] (question 10 answer choice A)'
+            - '\\item[B] (question 10 answer choice B)'
+            - '\\item[C] (question 10 answer choice C)'
+            - '\\item[D] (question 10 answer choice D)'
+            - '\\end{{enumerate}}'
+            - '\\end{{enumerate}}'
+            - '\\end{{document}}'
+        - Quiz document should be structured exactly as specified, do not add or remove anything, only fill in the information from the input materials.
+
 
         --- ANSWER KEY ---
-        - Must be a valid LaTeX document with:
-        - '\\begin{{document}}' and '\\end{{document}}'
+        - Must be a valid LaTeX document
         - Must always include an answer key that directly follows the quiz questions.
-        - Use `\\newpage` to begin answer key
         - List answers clearly: `1. (B)`, `2. (C)`, … `10. (A)`
-        - Each answer should be styled as follows:
-            - '\\item[(question number)] (correct answer choice)'
         - Answers should be correct and accurate
         - Must include all 10 answers and be easy to match back to the quiz
+        - The answer-key document should be strictly styled as follows, only fill in the correct answers to the corresponding questions:
+            - '\\begin{{document}}'
+            - '\\newpage'
+            - '\\begin{{enumerate}}'
+            - '\\item[1] (Correct answer choice for quiz question 1)'
+            - '\\item[2] (Correct answer choice for quiz question 2)'
+            - '\\item[3] (Correct answer choice for quiz question 3)'
+            - '\\item[4] (Correct answer choice for quiz question 4)'
+            - '\\item[5] (Correct answer choice for quiz question 5)'
+            - '\\item[6] (Correct answer choice for quiz question 6)'
+            - '\\item[7] (Correct answer choice for quiz question 7)'
+            - '\\item[8] (Correct answer choice for quiz question 8)'
+            - '\\item[9] (Correct answer choice for quiz question 9)'
+            - '\\item[10] (Correct answer choice for quiz question 10)'
+            - '\\end{{enumerate}}'
+            - '\\end{{document}}'
+        - Answer-key document should be structured exactly as specified, do not add or remove anything, only fill in the correct answers to the questions
 
         --- FLASHCARDS ---
         - Maintain current format: JSON array with "front" and "back" strings
@@ -90,7 +174,7 @@ class GroqProcessor:
         - REQUIRED: Each answer choice must be its own LaTeX item 
         - REQUIRED: Answer key always contains correct answers for the 10 questions in the quiz.
         - REQUIRED: Be sure to generate the full, complete LaTeX documents for the notes, quiz, answer key, and flashcards
-        - REQUIRED: Quiz questions and answer key should always adhere exactly to the specified style
+        - REQUIRED: Notes, quiz, answer-key, and flashcards should always adhere exactly to the specified style
         """
 
 
