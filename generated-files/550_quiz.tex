@@ -21,57 +21,78 @@
 \item[D] To increase the memory usage
 \end{enumerate}
 
-\item What is the approximation ratio of an algorithm?
+\item Which algorithm is used for vertex cover with an approximation guarantee of 2?
 \begin{enumerate}
-\item[A] The smallest $\alpha$ such that the algorithm is an $\alpha$-approximation algorithm
-\item[B] The largest $\alpha$ such that the algorithm is an $\alpha$-approximation algorithm
-\item[C] The average running time of the algorithm
-\item[D] The worst-case running time of the algorithm
+\item[A] Greedy algorithm
+\item[B] Select an arbitrary edge and add both endpoints to the solution
+\item[C] Dynamic programming
+\item[D] Brute force
 \end{enumerate}
 
-\item What is the goal of the vertex cover problem?
+\item What is the approximation guarantee of the greedy algorithm for load balancing?
 \begin{enumerate}
-\item[A] To find a minimum vertex cover
-\item[B] To find a maximum independent set
-\item[C] To find a minimum dominating set
-\item[D] To find a maximum clique
-\end{enumerate}
-
-\item What is the algorithm for vertex cover?
-\begin{enumerate}
-\item[A] Add one endpoint of each edge to the solution
-\item[B] Add both endpoints of each edge to the solution
-\item[C] Use a greedy approach to select vertices
-\item[D] Use a dynamic programming approach
-\end{enumerate}
-
-\item What is the approximation ratio of the vertex cover algorithm?
-\begin{enumerate}
-\item[A] 1
-\item[B] 2
-\item[C] 3
-\item[D] 4
+\item[A] 2
+\item[B] 3
+\item[C] 4
+\item[D] 5
 \end{enumerate}
 
 \item What is the goal of the load balancing problem?
 \begin{enumerate}
-\item[A] To minimize the maximum load
-\item[B] To maximize the minimum load
-\item[C] To minimize the average load
-\item[D] To maximize the total load
+\item[A] To minimize the average load
+\item[B] To minimize the maximum load
+\item[C] To maximize the minimum load
+\item[D] To maximize the average load
 \end{enumerate}
 
-\item What is the algorithm for load balancing?
+\item Which algorithm is used for load balancing?
 \begin{enumerate}
-\item[A] Assign each job to the machine with the smallest load
-\item[B] Assign each job to the machine with the largest load
-\item[C] Use a greedy approach to select machines
-\item[D] What is the running time of the load balancing algorithm?
+\item[A] Greedy algorithm
+\item[B] Dynamic programming
+\item[C] Brute force
+\item[D] Greedy algorithm assigning jobs to machines with the smallest load
+\end{enumerate}
+
+\item What is the improved approximation guarantee for the load balancing algorithm?
 \begin{enumerate}
-\item[A] O(n)
-\item[B] O(n log n)
-\item[C] O(n^2)
-\item[D] O(m \cdot n)
+\item[A] 2
+\item[B] $(2 - \frac{1}{m})$
+\item[C] 3
+\item[D] 4
+\end{enumerate}
+
+\item What is the definition of an $\alpha$-approximation algorithm?
+\begin{enumerate}
+\item[A] A polynomial-time algorithm that returns a solution within a factor $\alpha$ of optimal
+\item[B] A polynomial-time algorithm that returns an optimal solution
+\item[C] A polynomial-time algorithm that returns a solution within a factor $\frac{1}{\alpha}$ of optimal
+\item[D] A polynomial-time algorithm that returns a solution within a factor $\alpha^2$ of optimal
+\end{enumerate}
+
+\item What is the name of the problem where we want to return a subset of vertices that covers all edges in a graph?
+\begin{enumerate}
+\item[A] Vertex cover
+\item[B] Load balancing
+\item[C] Scheduling
+\item[D] Approximation algorithms
+\end{enumerate}
+
+\item What is the goal of the vertex cover problem?
+\begin{enumerate}
+\item[A] To find a subset of vertices that covers all edges
+\item[B] To find a subset of edges that covers all vertices
+\item[C] To find a subset of vertices that covers some edges
+\item[D] To find a subset of edges that covers some vertices
+\end{enumerate}
+
+\item What is the name of the problem where we want to assign jobs to machines to minimize the maximum load?
+\begin{enumerate}
+\item[A] Load balancing
+\item[B] Vertex cover
+\item[C] Scheduling
+\item[D] Approximation algorithms
 \end{enumerate}
 
 \end{enumerate}
+
+\end{document}

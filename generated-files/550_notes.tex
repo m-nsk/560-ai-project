@@ -17,26 +17,14 @@ Approximation algorithms don't always return an optimal solution, but their solu
 
 \subsection{Vertex Cover}
 
-Given an undirected graph $G$, the goal is to return a minimum vertex cover of $G$. A vertex cover is a subset $S$ of $V$ such that for every edge $E$ in $G$, $u$ is in $S$ or $v$ is in $S$.
+Consider a vertex cover problem. The goal is to return a subset of vertices that covers all edges in a graph. A natural greedy algorithm for vertex cover is to repeatedly select a vertex that covers the most edges and add it to the solution.
 
-\textbf{Algorithm:}
-
-Set $S = \emptyset$. While $G$ has an edge $e = {u, v}$, add both endpoints of $e$ to $S$, and remove $u$ and $v$ from $G$. Repeat this process until $G$ has no edges and return $S$.
-
-\textit{Proof:}
-
-The edges considered by the algorithm form a matching $M$, so $|ALG| = 2 \cdot |M|$. Furthermore, each vertex in $OPT$ can cover at most one edge in $M$, so $|OPT| \geq |M|$. Thus, $|ALG| = 2 \cdot |M| \leq 2 \cdot |OPT|$.
+However, this greedy algorithm is not always optimal. A better approach is to select an arbitrary edge, add both of its endpoints to the solution, and remove them from the graph. This algorithm has an approximation guarantee of 2.
 
 \subsection{Load Balancing}
 
-Given an array $L$ of $n$ positive integers and a positive integer $m$, the goal is to assign each job to a machine such that the maximum load is minimized.
+Consider a load balancing problem. The goal is to assign jobs to machines to minimize the maximum load. A greedy algorithm for load balancing is to assign each job to the machine with the smallest current load.
 
-\textbf{Algorithm:}
-
-Iterate through the jobs (in any order), assigning each one to the machine with the smallest load so far.
-
-\textit{Proof:}
-
-Suppose $ALG$ achieves a makespan of $T$, the load of $i \in [m]$ is $T$, and $k$ was the last job assigned to $i$. When $ALG$ assigned $k$ to $i$, $i$ had the smallest load. This means the load on every machine is at least $T - \ell[k]$, so $\sum_{j=1}^{n} \ell[j] \geq m(T - \ell[k]$. Rearranging yields $T \leq \frac{\sum_{j=1}^{n} \ell[j]}{m} + \ell[k]$.
+This algorithm has an approximation guarantee of 2. We can improve the analysis to show that the algorithm is a $(2 - \frac{1}{m})$-approximation algorithm.
 
 \end{document}
