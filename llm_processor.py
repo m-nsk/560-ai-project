@@ -113,7 +113,6 @@ class GroqProcessor:
         - MUST be a valid LaTeX document containing *EXACTLY 10* multiple choice questions
         - Each question must have four answer choices: (A), (B), (C), (D)
         - Each answer choice should be valid and relevant to the question
-        - The correct answer choice should have equal probability of
         - Each question should be styled as follows:
         - All questions must be answerable from the input material and written at a college difficulty level
         - The quiz document should be strictly styled as follows, only fill in the questions and the answer choices:
@@ -244,6 +243,13 @@ class GroqProcessor:
         - REQUIRED: Must generate exactly 10 questions with exactly 4 choices each
         - REQUIRED: Answer key must contain answers to all 10 questions
         - REQUIRED: Notes, quiz, answer-key, and flashcards must match the given structure exactly
+
+        --- OUTPUT SEPARATION RULES ---
+        - The `notes` document must NOT contain any quiz content.
+        - The `quiz` and `answer-key` must be generated in their own LaTeX documents and placed in the appropriate JSON fields.
+        - NEVER include a section or subsection titled "Quiz", "Questions", or "Review Questions" in the `notes`.
+        - The `notes` section must be entirely focused on explanation, definitions, algorithms, theorems, and proofs — no question-answer or multiple choice formats of any kind.
+
         """
 
 
