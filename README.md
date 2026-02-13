@@ -73,7 +73,7 @@ Currently, the Proof of Concept is set up to process sample files located in the
     python main.py
     ```
 
-The script will output the generated notes and quiz questions to the console and save an Anki deck (e.g., `550-8.1-8.2.apkg`) to the `anki-decks` folder.
+The script will output the generated notes and quiz questions to the console and save an Anki deck (e.g., `lecture.apkg`) to the `anki-decks` folder.
 
 ## Future Improvements
 

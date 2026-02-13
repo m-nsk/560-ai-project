@@ -21,7 +21,7 @@ transcript = None
 # transcript = localTranscriber.transcribe(filename)
 # print(transcript)
 
-with open("test-files/550 8.1 8.2 transcript.txt", "r") as f:
+with open("test-files/lecture_transcript.txt", "r") as f:
     transcript = f.read() # TODO: the transcript is being fed manually just so we don't have to call Whisper every time. The above whisper code works!
 
 slides = None
@@ -62,5 +62,5 @@ for i, question in enumerate(result["quiz"], 1):
     print(f"Correct Answer: {question['correct_answer']}")
 
 # Generate Anki deck from response
-topic_name = "550-8.1-8.2"
+topic_name = "lecture_1"
 generate_anki_deck(result["flashcards"], topic_name)
